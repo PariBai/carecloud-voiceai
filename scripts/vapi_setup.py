@@ -81,8 +81,9 @@ MESSAGE_PLAN = {
 }
 
 FIRST_MESSAGE = (
-    "Thanks for calling CareCloud Family Health, this is Riley. "
-    "Am I speaking with someone looking to register as a new patient?"
+    "Hi, thanks for calling CareCloud Family Health! This is Riley. "
+    "I can get you registered as a new patient right here over the phone. "
+    "Shall we get started?"
 )
 
 # --- Field schemas reused across tools --------------------------------------
