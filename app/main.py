@@ -16,7 +16,7 @@ from fastapi.responses import HTMLResponse
 from app.config import settings
 from app.database import init_db
 from app.responses import err
-from app.routers import patients, vapi
+from app.routers import dashboard, patients, vapi
 
 logging.basicConfig(
     level=settings.LOG_LEVEL,
@@ -36,6 +36,7 @@ app = FastAPI(title=settings.APP_NAME, version="1.0.0", lifespan=lifespan)
 
 app.include_router(patients.router)
 app.include_router(vapi.router)
+app.include_router(dashboard.router)
 
 
 @app.get("/", response_class=HTMLResponse, tags=["meta"])
@@ -55,9 +56,11 @@ def index():
 <h1>CareCloud — Patient Registration API</h1>
 <p class="tag">Voice AI intake agent &middot; status: <span class="ok">live</span></p>
 <p>Call the agent at <strong>+1 (346) 292-9312</strong> to register a patient by voice.</p>
+<p>&rarr; <a href="/dashboard"><strong>Open the patients dashboard</strong></a> for a friendly table view.</p>
 <h3>Endpoints</h3>
 <ul>
-  <li><a href="/patients">/patients</a> &mdash; list all patients (filters: <code>?last_name=</code>, <code>?date_of_birth=</code>, <code>?phone_number=</code>)</li>
+  <li><a href="/dashboard">/dashboard</a> &mdash; web UI (searchable patient table)</li>
+  <li><a href="/patients">/patients</a> &mdash; list all patients as JSON (filters: <code>?last_name=</code>, <code>?date_of_birth=</code>, <code>?phone_number=</code>)</li>
   <li><code>/patients/{id}</code> &mdash; one patient</li>
   <li><code>POST /patients</code> &middot; <code>PUT /patients/{id}</code> &middot; <code>DELETE /patients/{id}</code> (soft-delete)</li>
   <li><a href="/health">/health</a> &mdash; liveness</li>
