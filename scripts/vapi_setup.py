@@ -62,7 +62,23 @@ MODEL_NAME = "gpt-4.1"
 # actually finished (not just paused), so the agent stops interrupting and
 # stops mis-firing on half-sentences. 0.6s wait suits slower/accented pacing.
 START_SPEAKING_PLAN = {"waitSeconds": 0.6, "smartEndpointingEnabled": "livekit"}
-BACKGROUND_DENOISING = True
+# Denoising OFF: it can mistake a soft/accented voice for noise and strip it,
+# which shows up as "it wasn't listening while I was talking". A clean audio
+# path is more reliable here than aggressive noise removal.
+BACKGROUND_DENOISING = False
+
+# Don't hang up on a short pause. Give the caller 60s, and gently re-engage
+# ("Are you still there?") a few times before the call ever times out — accented
+# callers pause to think, and an abrupt disconnect is a bad experience.
+SILENCE_TIMEOUT_SECONDS = 60
+MESSAGE_PLAN = {
+    "idleMessages": [
+        "Are you still there?",
+        "Take your time — I'm still here whenever you're ready.",
+    ],
+    "idleTimeoutSeconds": 12,
+    "idleMessageMaxSpokenCount": 3,
+}
 
 FIRST_MESSAGE = (
     "Thanks for calling CareCloud Family Health, this is Riley. "
@@ -210,6 +226,8 @@ def build_assistant(webhook_url: str) -> dict:
         "transcriber": TRANSCRIBER,
         "startSpeakingPlan": START_SPEAKING_PLAN,
         "backgroundDenoisingEnabled": BACKGROUND_DENOISING,
+        "silenceTimeoutSeconds": SILENCE_TIMEOUT_SECONDS,
+        "messagePlan": MESSAGE_PLAN,
         # Server-level events (fired to assistant.server.url). Only the ones we
         # actually use — never transcript/speech-update (they flood the server).
         "server": server,
