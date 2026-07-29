@@ -1,12 +1,15 @@
+# Minimum version bounds (not exact pins) so the same file installs cleanly
+# across environments/mirrors. The app relies on Pydantic v2 and SQLAlchemy 2.
+
 # Core web framework + server
-fastapi==0.140.13
-uvicorn[standard]==0.52.0
+fastapi>=0.110
+uvicorn[standard]>=0.30
 
 # Data layer
-SQLAlchemy==2.0.51
-pydantic==2.13.4
+SQLAlchemy>=2.0,<3.0
+pydantic>=2.7,<3.0
 
 # Config + HTTP (used by scripts/vapi_setup.py and tooling)
-python-dotenv==1.2.2
-requests==2.34.2
-httpx==0.28.1
+python-dotenv>=1.0
+requests>=2.31
+httpx>=0.27
