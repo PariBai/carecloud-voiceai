@@ -14,14 +14,15 @@ Built for the CareCloud "Voice AI / Conversational AI Engineer" take-home.
 | | |
 |---|---|
 | **Phone number (call this)** | **+1 (346) 292-9312** |
-| **API base URL** | `https://<tunnel-or-host>` — see note below |
+| **API base URL** | `https://mississippi-notices-dsl-river.trycloudflare.com` |
 | **Health check** | `GET /health` |
 | **View patients** | `GET /patients` |
 
-> The API is exposed over an HTTPS tunnel (Cloudflare). The tunnel host is set
-> at run time; the current value is printed when the tunnel starts and wired
-> into the Vapi assistant with `scripts/vapi_setup.py`. Vapi (the telephony
-> layer) is hosted by Vapi and always reachable at the phone number above.
+> The API runs on an Alibaba Cloud ECS instance and is exposed over an HTTPS
+> Cloudflare tunnel (outbound-only — no inbound ports opened). Vapi (the
+> telephony layer) is hosted by Vapi and always reachable at the phone number
+> above. If the tunnel host ever rotates, re-point the assistant with
+> `scripts/vapi_setup.py --assistant-id <id> --webhook-url <new>/webhook`.
 
 ---
 
@@ -181,6 +182,33 @@ API), and call it.
 | `VAPI_WEBHOOK_SECRET` | no | If set, webhooks must carry a matching `x-vapi-secret` header |
 | `DATABASE_URL` | no | Defaults to `sqlite:///data/patients.db` |
 | `LOG_LEVEL` | no | Defaults to `INFO` |
+
+---
+
+## Deployment (production)
+
+Runs on an Alibaba Cloud ECS instance (Ubuntu 22.04) as two systemd services,
+so both survive reboots and restart on crash. The app binds to `127.0.0.1`
+only and is reached exclusively through an outbound Cloudflare tunnel — **no
+inbound ports are opened and nothing else on the host is touched** (an existing
+service on ports 80/8086 was left untouched).
+
+```
+/opt/carecloud                     # git clone of this repo
+  ├─ venv/                         # isolated Python env
+  ├─ .env                          # secrets (not in git)
+  └─ cloudflared                   # tunnel binary
+
+carecloud-api.service    -> venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+carecloud-tunnel.service -> cloudflared tunnel --url http://127.0.0.1:8000
+```
+
+Update flow:
+
+- **Server code change** → `cd /opt/carecloud && git pull && systemctl restart carecloud-api`
+- **Prompt / model / STT / voice / tool signature change** → just re-run
+  `scripts/vapi_setup.py --assistant-id <id> --webhook-url <url>/webhook`
+  (updates Vapi directly; no server redeploy needed).
 
 ---
 
