@@ -121,9 +121,12 @@ def handle_register_patient(db: Session, arguments) -> str:
             "Please try again in a moment."
         )
 
-    # Observability: log the final collected payload (no full record read aloud).
-    logger.info("Registered patient %s (%s %s)", patient.patient_id,
-                patient.first_name, patient.last_name)
+    # Observability: log the full final collected payload (challenge requirement).
+    logger.info(
+        "Registered patient %s | payload=%s",
+        patient.patient_id,
+        payload.model_dump(mode="json"),
+    )
     return (
         f"You're all set, {patient.first_name}. Your registration is complete "
         f"and saved. Is there anything else I can help you with?"
