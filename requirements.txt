@@ -1,0 +1,12 @@
+# Core web framework + server
+fastapi==0.140.13
+uvicorn[standard]==0.52.0
+
+# Data layer
+SQLAlchemy==2.0.51
+pydantic==2.13.4
+
+# Config + HTTP (used by scripts/vapi_setup.py and tooling)
+python-dotenv==1.2.2
+requests==2.34.2
+httpx==0.28.1

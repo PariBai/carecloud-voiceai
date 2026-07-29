@@ -1,0 +1,31 @@
+# Secrets — never commit
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtual environment
+carecloud/
+venv/
+.venv/
+
+# Database (runtime data)
+data/*.db
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
+
+# Tunnel binary (large, platform-specific — download per machine)
+cloudflared.exe
+cloudflared
+
+# Logs
+*.log
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
