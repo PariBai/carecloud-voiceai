@@ -1,0 +1,12 @@
+carecloud/
+venv/
+.venv/
+__pycache__/
+*.pyc
+.git/
+.env
+data/*.db
+data/*.db-*
+cloudflared
+cloudflared.exe
+*.log

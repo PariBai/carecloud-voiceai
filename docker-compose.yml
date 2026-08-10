@@ -1,0 +1,26 @@
+# Runs the API and the Cloudflare tunnel as two detached, auto-restarting
+# containers — no terminal to keep open, survives reboots.
+#
+#   docker compose up -d --build        # start (detached)
+#   docker compose run --rm api python -m scripts.seed   # seed demo data (once)
+#   docker compose logs -f tunnel       # read the public https URL
+#   docker compose down                 # stop
+#
+# The tunnel reaches the API over the internal compose network (api:8000), so
+# no host port is published and there's no clash with anything on the host.
+
+services:
+  api:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data          # SQLite file persists across restarts
+    expose:
+      - "8000"
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate --url http://api:8000
+    depends_on:
+      - api
