@@ -14,7 +14,7 @@ Built for the CareCloud "Voice AI / Conversational AI Engineer" take-home.
 | | |
 |---|---|
 | **Phone number (call this)** | **+1 (346) 292-9312** |
-| **API base URL** | `https://restoration-hostels-peak-typing.trycloudflare.com` |
+| **API base URL** | `https://behavioral-west-oregon-horn.trycloudflare.com` |
 | **Health check** | `GET /health` |
 | **View patients** | `GET /patients` &middot; **Dashboard:** `/dashboard` |
 
