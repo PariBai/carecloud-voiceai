@@ -14,14 +14,14 @@ Built for the CareCloud "Voice AI / Conversational AI Engineer" take-home.
 | | |
 |---|---|
 | **Phone number (call this)** | **+1 (346) 292-9312** |
-| **API base URL** | `https://mississippi-notices-dsl-river.trycloudflare.com` |
+| **API base URL** | `https://restoration-hostels-peak-typing.trycloudflare.com` |
 | **Health check** | `GET /health` |
-| **View patients** | `GET /patients` |
+| **View patients** | `GET /patients` &middot; **Dashboard:** `/dashboard` |
 
-> The API runs on an Alibaba Cloud ECS instance and is exposed over an HTTPS
-> Cloudflare tunnel (outbound-only — no inbound ports opened). Vapi (the
-> telephony layer) is hosted by Vapi and always reachable at the phone number
-> above. If the tunnel host ever rotates, re-point the assistant with
+> The phone number (hosted by Vapi) is the stable entry point and always works.
+> The REST API is served through an HTTPS Cloudflare tunnel (outbound-only, no
+> inbound ports); the tunnel host can rotate, so if the API URL above is stale,
+> the number still works and the current URL can be re-pointed in one command:
 > `scripts/vapi_setup.py --assistant-id <id> --webhook-url <new>/webhook`.
 
 ---
